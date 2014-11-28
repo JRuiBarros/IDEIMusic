@@ -10,6 +10,6 @@ namespace idei.Models
         public int GenreId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public virtual List<Album> Albums { get; set; }
+        public virtual List<Record> Records { get; set; }
     }
 }

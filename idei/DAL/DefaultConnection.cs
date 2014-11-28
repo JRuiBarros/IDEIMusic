@@ -8,12 +8,13 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace idei.DAL
 {
-    public class IDEIContext : DbContext
+    public class DefaultConnection : DbContext
     {
-        public IDEIContext() : base("IDEIContext") { }
-        public DbSet<Album> Albums { get; set; }
+        public DefaultConnection() : base("DefaultConnection") { }
+        public DbSet<Record> Records { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Artist> Artists { get; set; }
+        public DbSet<Format> Formats { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
