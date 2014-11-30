@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.Entity;
-using idei.DAL;
 using idei.Models;
+
 
 namespace idei.DAL
 {
@@ -203,6 +203,13 @@ namespace idei.DAL
             };
             records.ForEach(r => context.Records.Add(r));
             context.SaveChanges();
+
+            //var orders = new List<Order>{ 
+                             
+            //    new Order{ User = context.users.Single( u => u.Id == "c94079b9-7c06-4e41-90ab-a1f38e122fb0" )}
+            //};
+            
+
         }
     }
 }

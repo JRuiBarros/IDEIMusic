@@ -11,6 +11,7 @@ using idei.Models;
 
 namespace idei.Controllers
 {
+    [Authorize(Roles = "Manager")]
     public class GenresController : Controller
     {
         private DefaultConnection db = new DefaultConnection();

@@ -15,7 +15,7 @@ namespace idei.DAL
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Artist> Artists { get; set; }
         public DbSet<Format> Formats { get; set; }
-
+        //public DbSet<Order> Orders { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
