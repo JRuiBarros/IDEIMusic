@@ -285,6 +285,7 @@
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\Format.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderList.cs" />
     <Compile Include="Models\Record.cs" />
     <Compile Include="Models\Artist.cs" />
     <Compile Include="Models\Genre.cs" />

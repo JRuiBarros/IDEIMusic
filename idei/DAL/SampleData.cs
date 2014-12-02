@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Data.Entity;
 using idei.Models;
+using Microsoft.AspNet.Identity;
+using IdentitySample.Models;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin;
+using Microsoft.Owin.Security;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.Web.Mvc;
+using System.Web;
 
 
 namespace idei.DAL
@@ -204,12 +211,22 @@ namespace idei.DAL
             records.ForEach(r => context.Records.Add(r));
             context.SaveChanges();
 
-            //var orders = new List<Order>{ 
+         
+            //var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var orders = new List<Order>{ 
                              
-            //    new Order{ User = context.users.Single( u => u.Id == "c94079b9-7c06-4e41-90ab-a1f38e122fb0" )}
-            //};
-            
+                new Order{ /*UserId ="c94079b9-7c06-4e41-90ab-a1f38e122fb0"
+                    User = userManager.FindByEmail( "admin@example.com" ),*/ OrderDate = new DateTime(2014,12,24)}
+            };
+            orders.ForEach(o => context.Orders.Add(o));
+            context.SaveChanges();
 
+
+            var orderLists = new List<OrderList>{
+                new OrderList{Order = orders.Single(o=> o.OrderId == 1),Quantity = 2,UnitPrice = 50, Record = records.Single(r => r.Title == "Balls to the Wall" )}
+            };
+            orderLists.ForEach(o => context.OrderLists.Add(o));
+            context.SaveChanges();
         }
     }
 }
