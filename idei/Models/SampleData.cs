@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
-using idei.Models;
 using Microsoft.AspNet.Identity;
 using IdentitySample.Models;
 using Microsoft.AspNet.Identity.Owin;
@@ -13,11 +12,11 @@ using System.Web.Mvc;
 using System.Web;
 
 
-namespace idei.DAL
+namespace idei.Models
 {
-    public class SampleData : DropCreateDatabaseIfModelChanges<DefaultConnection>
+    public class SampleData : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
     {
-        protected override void Seed(DefaultConnection context)
+        protected override void Seed(ApplicationDbContext context)
         {
             var formats = new List<Format>
             {

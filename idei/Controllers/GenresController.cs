@@ -6,15 +6,15 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using idei.DAL;
 using idei.Models;
+using IdentitySample.Models;
 
 namespace idei.Controllers
 {
     [Authorize(Roles = "Manager")]
     public class GenresController : Controller
     {
-        private DefaultConnection db = new DefaultConnection();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Genres
         public ActionResult Index()

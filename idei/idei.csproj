@@ -276,8 +276,7 @@
     <Compile Include="Controllers\RolesAdminController.cs" />
     <Compile Include="Controllers\StoreManagerController.cs" />
     <Compile Include="Controllers\UserAdminController.cs" />
-    <Compile Include="DAL\DefaultConnection.cs" />
-    <Compile Include="DAL\SampleData.cs" />
+    <Compile Include="Models\SampleData.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -6,15 +6,15 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using idei.DAL;
 using idei.Models;
+using IdentitySample.Models;
 
 namespace idei.Controllers
 {
     [Authorize(Roles = "Manager")]
     public class StoreManagerController : Controller
     {
-        private DefaultConnection db = new DefaultConnection();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: StoreManager
         public ActionResult Index()
