@@ -11,18 +11,19 @@ using idei.Models;
 
 namespace idei.Controllers
 {
-    public class SalesInfoController : Controller
+    [Authorize(Roles = "Admin")]
+    public class OrdersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: SalesInfo
+        // GET: Orders
         public ActionResult Index()
         {
             var orders = db.Orders.Include(o => o.User);
             return View(orders.ToList());
         }
 
-        // GET: SalesInfo/Details/5
+        // GET: Orders/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,14 +38,14 @@ namespace idei.Controllers
             return View(order);
         }
 
-        // GET: SalesInfo/Create
+        // GET: Orders/Create
         public ActionResult Create()
         {
             ViewBag.UserId = new SelectList(db.Users, "Id", "Email");
             return View();
         }
 
-        // POST: SalesInfo/Create
+        // POST: Orders/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -62,7 +63,7 @@ namespace idei.Controllers
             return View(order);
         }
 
-        // GET: SalesInfo/Edit/5
+        // GET: Orders/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -78,7 +79,7 @@ namespace idei.Controllers
             return View(order);
         }
 
-        // POST: SalesInfo/Edit/5
+        // POST: Orders/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -95,7 +96,7 @@ namespace idei.Controllers
             return View(order);
         }
 
-        // GET: SalesInfo/Delete/5
+        // GET: Orders/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -110,7 +111,7 @@ namespace idei.Controllers
             return View(order);
         }
 
-        // POST: SalesInfo/Delete/5
+        // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

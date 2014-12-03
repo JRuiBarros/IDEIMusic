@@ -88,7 +88,34 @@ namespace IdentitySample.Models
         public Task SendAsync(IdentityMessage message)
         {
             // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            var credentialUserName = "ideimusic@outlook.com";
+            var sentFrom = "ideimusic@outlook.com";
+            var pwd = "Qwerty123456";
+
+            // Configure the client:
+            System.Net.Mail.SmtpClient client =
+                new System.Net.Mail.SmtpClient("smtp-mail.outlook.com");
+
+            client.Port = 587;
+            client.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+
+            // Create the credentials:
+            System.Net.NetworkCredential credentials =
+                new System.Net.NetworkCredential(credentialUserName, pwd);
+
+            client.EnableSsl = true;
+            client.Credentials = credentials;
+
+            // Create the message:
+            var mail =
+                new System.Net.Mail.MailMessage(sentFrom, message.Destination);
+
+            mail.Subject = message.Subject;
+            mail.Body = message.Body;
+
+            // Send:
+            return client.SendMailAsync(mail);
         }
     }
 
@@ -139,7 +166,7 @@ namespace IdentitySample.Models
 
             var user = userManager.FindByName(name);
             if (user == null) {
-                user = new ApplicationUser { UserName = name, Email = name };
+                user = new ApplicationUser { UserName = name, Email = name, EmailConfirmed = true };
                 var result = userManager.Create(user, password);
                 result = userManager.SetLockoutEnabled(user.Id, false);
             }
@@ -147,18 +174,20 @@ namespace IdentitySample.Models
             var managerUser = userManager.FindByName(managerName);
             if (managerUser == null)
             {
-                managerUser = new ApplicationUser { UserName = managerName, Email = managerName };
+                managerUser = new ApplicationUser { UserName = managerName, Email = managerName, EmailConfirmed = true };
                 userManager.Create(managerUser, managerPassword);
                 userManager.SetLockoutEnabled(managerUser.Id, false);
             }
 
+            var temp = new ApplicationUser { UserName = "tmp@hue.br", Email = "tmp@hue.br" };
+            userManager.Create(temp, "Tmp@123");
 
             // Add user admin to Role Admin if not already added
             var rolesForUser = userManager.GetRoles(user.Id);
             if (!rolesForUser.Contains(role.Name)) {
                 var result = userManager.AddToRole(user.Id, role.Name);
             }
-
+         
             var rolesForManagerUser = userManager.GetRoles(managerUser.Id);
             if (!rolesForManagerUser.Contains(managerRole.Name))
             {
