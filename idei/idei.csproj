@@ -198,6 +198,11 @@
     <Content Include="Views\Genres\Details.cshtml" />
     <Content Include="Views\Genres\Edit.cshtml" />
     <Content Include="Views\Genres\Index.cshtml" />
+    <Content Include="Views\SalesInfo\Create.cshtml" />
+    <Content Include="Views\SalesInfo\Delete.cshtml" />
+    <Content Include="Views\SalesInfo\Details.cshtml" />
+    <Content Include="Views\SalesInfo\Edit.cshtml" />
+    <Content Include="Views\SalesInfo\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -274,6 +279,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
+    <Compile Include="Controllers\SalesInfoController.cs" />
     <Compile Include="Controllers\StoreManagerController.cs" />
     <Compile Include="Controllers\UserAdminController.cs" />
     <Compile Include="Models\SampleData.cs" />
