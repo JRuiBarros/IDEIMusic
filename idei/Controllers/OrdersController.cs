@@ -50,7 +50,7 @@ namespace idei.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "OrderId,UserId,OrderDate")] Order order)
+        public ActionResult Create([Bind(Include = "OrderId,UserId,Total,OrderDate")] Order order)
         {
             if (ModelState.IsValid)
             {
@@ -84,7 +84,7 @@ namespace idei.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "OrderId,UserId,OrderDate")] Order order)
+        public ActionResult Edit([Bind(Include = "OrderId,UserId,Total,OrderDate")] Order order)
         {
             if (ModelState.IsValid)
             {

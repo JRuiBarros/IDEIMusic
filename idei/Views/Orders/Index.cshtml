@@ -15,6 +15,9 @@
             @Html.DisplayNameFor(model => model.User.Email)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Total)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.OrderDate)
         </th>
         <th></th>
@@ -24,6 +27,9 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.User.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Total)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.OrderDate)

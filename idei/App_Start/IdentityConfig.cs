@@ -390,8 +390,10 @@ namespace IdentitySample.Models
             //var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var orders = new List<Order>{ 
                              
-                new Order{ /*UserId ="c94079b9-7c06-4e41-90ab-a1f38e122fb0"*/
-                    User = userManager.FindByEmail( "admin@example.com" ), OrderDate = new DateTime(2014,12,24)}
+                new Order{ 
+                    User = userManager.FindByEmail( "admin@example.com" ), OrderDate = new DateTime(2014,12,24),Total=50},
+                    new Order{ 
+                    User = userManager.FindByEmail( "manager@example.com" ), OrderDate = new DateTime(2014,12,24),Total=150}
             };
             orders.ForEach(o => db.Orders.Add(o));
             db.SaveChanges();
