@@ -17,9 +17,24 @@ namespace idei.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Orders
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder)
         {
+            ViewBag.NameSortParm = "name_desc";
+            ViewBag.DateSortParm = "date_desc";
+            ViewBag.TotalSortParm = "total_desc";
             var orders = db.Orders.Include(o => o.User);
+            switch (sortOrder)
+            {
+                //case "name_desc":
+                //    orders = orders.OrderByDescending(s => s);
+                //    break;
+                case "date_desc":
+                    orders = orders.OrderByDescending(s => s.OrderDate);
+                    break;
+                case "total_desc":
+                    orders = orders.OrderByDescending(s => s.Total);
+                    break;
+            }
             return View(orders.ToList());
         }
 

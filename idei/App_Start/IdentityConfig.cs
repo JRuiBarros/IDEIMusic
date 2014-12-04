@@ -391,9 +391,9 @@ namespace IdentitySample.Models
             var orders = new List<Order>{ 
                              
                 new Order{ 
-                    User = userManager.FindByEmail( "admin@example.com" ), OrderDate = new DateTime(2014,12,24),Total=50},
+                    User = userManager.FindByEmail( "admin@example.com" ), OrderDate = new DateTime(2014,12,24),Total=150},
                     new Order{ 
-                    User = userManager.FindByEmail( "manager@example.com" ), OrderDate = new DateTime(2014,12,24),Total=150}
+                    User = userManager.FindByEmail( "manager@example.com" ), OrderDate = new DateTime(2014,12,25),Total=50}
             };
             orders.ForEach(o => db.Orders.Add(o));
             db.SaveChanges();
