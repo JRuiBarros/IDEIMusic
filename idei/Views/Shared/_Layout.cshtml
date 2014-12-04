@@ -29,6 +29,7 @@
                         <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
                         <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
                         <li>@Html.ActionLink("Orders", "Index", "Orders")</li>
+                        <li>@Html.ActionLink("Sales Info", "Index", "SalesInfo")</li>
                     }
                     @if (Request.IsAuthenticated && User.IsInRole("Manager"))
                     {

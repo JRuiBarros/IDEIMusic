@@ -14,6 +14,7 @@ namespace idei.Models
         public int FormatId { get; set; }
         public string Title { get; set; }
         public decimal Price { get; set; }
+        public int ShopSales { get; set; }
         public string AlbumArtUrl { get; set; }
         public virtual Genre Genre { get; set; }
         public virtual Artist Artist { get; set; }

@@ -375,12 +375,12 @@ namespace IdentitySample.Models
 
             var records = new List<Record>
             {
-                new Record { Title = "A Copland Celebration, Vol. I", Format = formats.Single(f => f.Name == "CD"), Genre = genres.Single(g => g.Name == "Classical"), Price = 8.99M, Artist = artists.Single(a => a.Name == "Aaron Copland & London Symphony Orchestra"), AlbumArtUrl = "/Content/Images/placeholder.gif" },
-                new Record { Title = "Worlds", Format = formats.Single(f => f.Name == "CD"), Genre = genres.Single(g => g.Name == "Jazz"), Price = 8.99M, Artist = artists.Single(a => a.Name == "Aaron Goldberg"), AlbumArtUrl = "/Content/Images/placeholder.gif" },
-                new Record { Title = "For Those About To Rock We Salute You", Format = formats.Single(f => f.Name == "CD"), Genre = genres.Single(g => g.Name == "Rock"), Price = 8.99M, Artist = artists.Single(a => a.Name == "AC/DC"), AlbumArtUrl = "/Content/Images/placeholder.gif" },
-                new Record { Title = "Let There Be Rock", Format = formats.Single(f => f.Name == "Vinyl"), Genre = genres.Single(g => g.Name == "Rock"), Price = 8.99M, Artist = artists.Single(a => a.Name == "AC/DC"), AlbumArtUrl = "/Content/Images/placeholder.gif" },
-                new Record { Title = "Balls to the Wall", Format = formats.Single(f => f.Name == "Vinyl"), Genre = genres.Single(g => g.Name == "Rock"), Price = 8.99M, Artist = artists.Single(a => a.Name == "Accept"), AlbumArtUrl = "/Content/Images/placeholder.gif" },
-                new Record { Title = "Restless and Wild", Format = formats.Single(f => f.Name == "Vinyl"), Genre = genres.Single(g => g.Name == "Rock"), Price = 8.99M, Artist = artists.Single(a => a.Name == "Accept"), AlbumArtUrl = "/Content/Images/placeholder.gif" },
+                new Record { Title = "A Copland Celebration, Vol. I",ShopSales = 10, Format = formats.Single(f => f.Name == "CD"), Genre = genres.Single(g => g.Name == "Classical"), Price = 8.99M, Artist = artists.Single(a => a.Name == "Aaron Copland & London Symphony Orchestra"), AlbumArtUrl = "/Content/Images/placeholder.gif" },
+                new Record { Title = "Worlds",ShopSales = 20, Format = formats.Single(f => f.Name == "CD"), Genre = genres.Single(g => g.Name == "Jazz"), Price = 8.99M, Artist = artists.Single(a => a.Name == "Aaron Goldberg"), AlbumArtUrl = "/Content/Images/placeholder.gif" },
+                new Record { Title = "For Those About To Rock We Salute You",ShopSales = 1, Format = formats.Single(f => f.Name == "CD"), Genre = genres.Single(g => g.Name == "Rock"), Price = 8.99M, Artist = artists.Single(a => a.Name == "AC/DC"), AlbumArtUrl = "/Content/Images/placeholder.gif" },
+                new Record { Title = "Let There Be Rock",ShopSales = 30, Format = formats.Single(f => f.Name == "Vinyl"), Genre = genres.Single(g => g.Name == "Rock"), Price = 8.99M, Artist = artists.Single(a => a.Name == "AC/DC"), AlbumArtUrl = "/Content/Images/placeholder.gif" },
+                new Record { Title = "Balls to the Wall",ShopSales = 400, Format = formats.Single(f => f.Name == "Vinyl"), Genre = genres.Single(g => g.Name == "Rock"), Price = 8.99M, Artist = artists.Single(a => a.Name == "Accept"), AlbumArtUrl = "/Content/Images/placeholder.gif" },
+                new Record { Title = "Restless and Wild",ShopSales = 500, Format = formats.Single(f => f.Name == "Vinyl"), Genre = genres.Single(g => g.Name == "Rock"), Price = 8.99M, Artist = artists.Single(a => a.Name == "Accept"), AlbumArtUrl = "/Content/Images/placeholder.gif" },
               
             };
             records.ForEach(r => db.Records.Add(r));
