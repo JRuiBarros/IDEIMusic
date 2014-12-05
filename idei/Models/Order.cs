@@ -13,7 +13,7 @@ namespace idei.Models
         public ApplicationUser User { get; set; }
         public System.DateTime OrderDate { get; set; }
         public virtual ICollection<OrderList> OrderLists { get; set; }
-        //private decimal total;
+        public decimal Total;
         //public decimal Total
         //{
         //    get
