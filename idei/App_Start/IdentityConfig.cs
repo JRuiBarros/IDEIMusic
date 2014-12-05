@@ -391,16 +391,17 @@ namespace IdentitySample.Models
             var orders = new List<Order>{ 
                              
                 new Order{ 
-                    User = userManager.FindByEmail( "admin@example.com" ), OrderDate = new DateTime(2014,12,24),Total=150},
+                    User = userManager.FindByEmail( "admin@example.com" ), OrderDate = new DateTime(2014,12,24)/*,Total=150*/},
                     new Order{ 
-                    User = userManager.FindByEmail( "manager@example.com" ), OrderDate = new DateTime(2014,12,25),Total=50}
+                    User = userManager.FindByEmail( "manager@example.com" ), OrderDate = new DateTime(2014,12,25),/*Total=50*/}
             };
             orders.ForEach(o => db.Orders.Add(o));
             db.SaveChanges();
 
 
             var orderLists = new List<OrderList>{
-                new OrderList{Order = orders.Single(o=> o.OrderId == 1),Quantity = 2,UnitPrice = 50, Record = records.Single(r => r.Title == "Balls to the Wall" )}
+                new OrderList{Order = orders[0],Quantity = 2,UnitPrice = 50, Record = records.Single(r => r.Title == "Balls to the Wall" )},
+                new OrderList{Order = orders[1],Quantity = 4,UnitPrice = 50, Record = records.Single(r => r.Title == "Balls to the Wall" )}
             };
             orderLists.ForEach(o => db.OrderLists.Add(o));
             db.SaveChanges();

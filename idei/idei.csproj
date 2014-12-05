@@ -208,6 +208,11 @@
     <Content Include="Views\SalesInfo\Details.cshtml" />
     <Content Include="Views\SalesInfo\Edit.cshtml" />
     <Content Include="Views\SalesInfo\Index.cshtml" />
+    <Content Include="Views\Orders1\Create.cshtml" />
+    <Content Include="Views\Orders1\Delete.cshtml" />
+    <Content Include="Views\Orders1\Details.cshtml" />
+    <Content Include="Views\Orders1\Edit.cshtml" />
+    <Content Include="Views\Orders1\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
