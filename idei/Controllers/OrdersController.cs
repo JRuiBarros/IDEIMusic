@@ -21,7 +21,7 @@ namespace idei.Controllers
         {
             ViewBag.NameSortParm = sortOrder == "name_desc" ? "name" : "name_desc";
             ViewBag.DateSortParm = sortOrder == "date_desc" ? "date" : "date_desc";
-            ViewBag.TotalSortParm = sortOrder == "total_desc" ? "total" : "total_desc";
+            //ViewBag.TotalSortParm = sortOrder == "total_desc" ? "total" : "total_desc";
             var orders = db.Orders.Include(o => o.User);
             switch (sortOrder)
             {
@@ -37,12 +37,12 @@ namespace idei.Controllers
                 case "date_desc":
                     orders = orders.OrderByDescending(s => s.OrderDate);
                     break;
-                case "total":
-                    orders = orders.OrderBy(s => s.Total);
-                    break;
-                case "total_desc":
-                    orders = orders.OrderByDescending(s => s.Total);
-                    break;
+                //case "total":
+                //    orders = orders.OrderBy(s => s.Total);
+                //    break;
+                //case "total_desc":
+                //    orders = orders.OrderByDescending(s => s.Total);
+                //    break;
             }
             return View(orders.ToList());
         }
