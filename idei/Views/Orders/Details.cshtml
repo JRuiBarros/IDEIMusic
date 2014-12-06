@@ -18,7 +18,7 @@
                         // Successful requests get here
                         // Update the page elements
                         //if (data.ItemCount == 0) {
-                        //    $('#row-' + data.DeleteId).fadeOut('slow');
+                        $('#row-' + orderListToDelete).fadeOut('slow');
                         //} else {
                         //    $('#item-count-' + data.DeleteId).text(data.ItemCount);
                         //}
@@ -72,7 +72,7 @@
 
                 @foreach (var xpto in Model.OrderLists)
                 {
-                    <tr>
+                    <tr id="row-@xpto.OrderListId">
                         <td>
                             @Html.DisplayFor(modelItem => xpto.Record.Title)
                         </td>
