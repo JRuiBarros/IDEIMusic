@@ -1,4 +1,5 @@
-﻿using IdentitySample.Models;
+﻿using idei.Models;
+using IdentitySample.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,45 @@ namespace idei
         {
             return Json.Encode(db.Records);
         }
-     
+
+        public void newOrder(string newOrder, string APIKey)
+        {
+            if (newOrder != null)
+            {
+                Order order = new Order { OrderDate = System.DateTime.Now };
+                db.Orders.Add(order);
+                db.SaveChanges();
+                dynamic temp = Json.Decode(newOrder);
+                foreach (dynamic pos in temp)
+                {
+                    string name = pos.Name;
+                    int quantity = Convert.ToInt32(pos.Quantity);
+                    Record record = db.Records.Single(o => o.Title == name);
+                    decimal unitPrice = record.Price;
+                    OrderList orderlist = new OrderList{Order = order, Quantity = quantity,UnitPrice = unitPrice, Record = record} ;
+                    db.OrderLists.Add(orderlist);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public void newSale(string newSale) {
+
+            if (newSale != null)
+            {
+                dynamic temp = Json.Decode(newSale);
+                foreach (dynamic pos in temp)
+                {
+                    string name = pos.Name;
+                    int quantity = Convert.ToInt32(pos.Quantity);
+                    Record record = db.Records.Single(o => o.Title == name);
+                    record.ShopSales += quantity;
+                    db.SaveChanges();
+                }
+            }
+        }
+
+
+
     }
 }

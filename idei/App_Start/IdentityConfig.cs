@@ -405,6 +405,10 @@ namespace IdentitySample.Models
             };
             orderLists.ForEach(o => db.OrderLists.Add(o));
             db.SaveChanges();
+
+            Record test = db.Records.Single(o => o.Title == "Balls to the Wall");
+            test.ShopSales += 1;
+            db.SaveChanges();
         }
     }
        

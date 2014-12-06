@@ -15,5 +15,9 @@ namespace idei
         void DoWork();
         [OperationContract]
         string GetAllRecords();
+        [OperationContract]
+        void newOrder(string newOrder, string APIKey);
+        [OperationContract]
+        void newSale(string newSale);
     }
 }
