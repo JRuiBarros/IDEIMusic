@@ -22,6 +22,20 @@ namespace idei
         {
 
         }
+
+        public string SendAPIKey(string email)
+        {
+            if (email != null)
+            {
+                var user = db.Users.Single(u => u.Email == email);
+                if (user != null)
+                {
+                    return user.Id;
+                }
+            }
+            return "Email not found!";
+        }
+
         public string GetAllRecords()
         {
             return Json.Encode(db.Records);
@@ -29,8 +43,9 @@ namespace idei
 
         public void newOrder(string newOrder, string APIKey)
         {
-            if (newOrder != null)
+            if (newOrder != null && APIKey != null)
             {
+                var user = db.Users.Single(u => u.Id == APIKey);
                 Order order = new Order { OrderDate = System.DateTime.Now };
                 db.Orders.Add(order);
                 db.SaveChanges();
@@ -46,7 +61,7 @@ namespace idei
                     db.SaveChanges();
                 }
 
-                MailMessage mail = new MailMessage("ideimusic@outlook.com", "To", "Encomenda", "A sua encomenda foi registada");
+                MailMessage mail = new MailMessage("ideimusic@outlook.com", user.Email, "Encomenda", "A sua encomenda foi registada");
                 NetworkCredential netCred = new NetworkCredential("ideimusic@outlook.com", "Qwerty123456");
                 SmtpClient smtpobj = new SmtpClient("smtp-mail.outlook.com", 587);
                 smtpobj.EnableSsl = true;
