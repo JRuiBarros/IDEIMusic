@@ -3,6 +3,8 @@ using IdentitySample.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
@@ -39,14 +41,22 @@ namespace idei
                     int quantity = Convert.ToInt32(pos.Quantity);
                     Record record = db.Records.Single(o => o.Title == name);
                     decimal unitPrice = record.Price;
-                    OrderList orderlist = new OrderList{Order = order, Quantity = quantity,UnitPrice = unitPrice, Record = record} ;
+                    OrderList orderlist = new OrderList { Order = order, Quantity = quantity, UnitPrice = unitPrice, Record = record };
                     db.OrderLists.Add(orderlist);
                     db.SaveChanges();
                 }
+
+                MailMessage mail = new MailMessage("ideimusic@outlook.com", "To", "Encomenda", "A sua encomenda foi registada");
+                NetworkCredential netCred = new NetworkCredential("ideimusic@outlook.com", "Qwerty123456");
+                SmtpClient smtpobj = new SmtpClient("smtp-mail.outlook.com", 587);
+                smtpobj.EnableSsl = true;
+                smtpobj.Credentials = netCred;
+                smtpobj.Send(mail);
             }
         }
 
-        public void newSale(string newSale) {
+        public void newSale(string newSale)
+        {
 
             if (newSale != null)
             {
