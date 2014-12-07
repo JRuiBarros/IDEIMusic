@@ -36,9 +36,12 @@ namespace idei
             return "Email not found!";
         }
 
-        public string GetAllRecords()
+        public string GetAllRecords(string APIKey)
         {
-            return Json.Encode(db.Records);
+            if (db.Users.Single(u => u.Id == APIKey) != null)
+                return Json.Encode(db.Records);
+            else
+                return "User not found!";
         }
 
         public void newOrder(string newOrder, string APIKey)
@@ -46,34 +49,37 @@ namespace idei
             if (newOrder != null && APIKey != null)
             {
                 var user = db.Users.Single(u => u.Id == APIKey);
-                Order order = new Order { OrderDate = System.DateTime.Now };
-                db.Orders.Add(order);
-                db.SaveChanges();
-                dynamic temp = Json.Decode(newOrder);
-                foreach (dynamic pos in temp)
+                if (user != null)
                 {
-                    string name = pos.Name;
-                    int quantity = Convert.ToInt32(pos.Quantity);
-                    Record record = db.Records.Single(o => o.Title == name);
-                    decimal unitPrice = record.Price;
-                    OrderList orderlist = new OrderList { Order = order, Quantity = quantity, UnitPrice = unitPrice, Record = record };
-                    db.OrderLists.Add(orderlist);
+                    Order order = new Order { OrderDate = System.DateTime.Now };
+                    db.Orders.Add(order);
                     db.SaveChanges();
-                }
+                    dynamic temp = Json.Decode(newOrder);
+                    foreach (dynamic pos in temp)
+                    {
+                        string name = pos.Name;
+                        int quantity = Convert.ToInt32(pos.Quantity);
+                        Record record = db.Records.Single(o => o.Title == name);
+                        decimal unitPrice = record.Price;
+                        OrderList orderlist = new OrderList { Order = order, Quantity = quantity, UnitPrice = unitPrice, Record = record };
+                        db.OrderLists.Add(orderlist);
+                        db.SaveChanges();
+                    }
 
-                MailMessage mail = new MailMessage("ideimusic@outlook.com", user.Email, "Encomenda", "A sua encomenda foi registada");
-                NetworkCredential netCred = new NetworkCredential("ideimusic@outlook.com", "Qwerty123456");
-                SmtpClient smtpobj = new SmtpClient("smtp-mail.outlook.com", 587);
-                smtpobj.EnableSsl = true;
-                smtpobj.Credentials = netCred;
-                smtpobj.Send(mail);
+                    MailMessage mail = new MailMessage("ideimusic@outlook.com", user.Email, "Encomenda", "A sua encomenda foi registada");
+                    NetworkCredential netCred = new NetworkCredential("ideimusic@outlook.com", "Qwerty123456");
+                    SmtpClient smtpobj = new SmtpClient("smtp-mail.outlook.com", 587);
+                    smtpobj.EnableSsl = true;
+                    smtpobj.Credentials = netCred;
+                    smtpobj.Send(mail);
+                }
             }
         }
 
-        public void newSale(string newSale)
+        public void newSale(string newSale,string APIKey)
         {
 
-            if (newSale != null)
+            if (newSale != null && db.Users.Single(u => u.Id == APIKey) != null)
             {
                 dynamic temp = Json.Decode(newSale);
                 foreach (dynamic pos in temp)

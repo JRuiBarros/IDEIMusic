@@ -14,10 +14,10 @@ namespace idei
         [OperationContract]
         void DoWork();
         [OperationContract]
-        string GetAllRecords();
+        string GetAllRecords(string APIKey);
         [OperationContract]
         void newOrder(string newOrder, string APIKey);
         [OperationContract]
-        void newSale(string newSale);
+        void newSale(string newSale, string APIKey);
     }
 }
