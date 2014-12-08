@@ -41,69 +41,78 @@ namespace idei
                     return user.Id;
                 }
             }
-            return "Email not found!";
+            return "Null Email!";
         }
 
         public string GetAllRecords(string APIKey)
         {
-            ApplicationUser user = null;
-            try
+            if (APIKey != null)
             {
-                user = db.Users.Single(u => u.Id == APIKey);
-            }
-            catch
-            {
-                return "User not found";
-            }
-            if (user != null)
+                ApplicationUser user = null;
+                try
+                {
+                    user = db.Users.Single(u => u.Id == APIKey);
+                }
+                catch
+                {
+                    return "User not found";
+                }
                 return Json.Encode(db.Records);
-            else
-                return "User not found!";
+            }
+            return "Null APIKey!";
         }
 
-        public void newOrder(string newOrder, string APIKey)
+        public string newOrder(string newOrder, string APIKey)
         {
             if (newOrder != null && APIKey != null)
             {
                 ApplicationUser user;
                 try
                 {
-                   user = db.Users.Single(u => u.Id == APIKey);
+                    user = db.Users.Single(u => u.Id == APIKey);
                 }
                 catch
                 {
-                    return;
+                    return "User not found!";
                 }
-                if (user != null)
-                {
-                    Order order = new Order { OrderDate = System.DateTime.Now };
-                    db.Orders.Add(order);
-                    db.SaveChanges();
-                    dynamic temp = Json.Decode(newOrder);
-                    foreach (dynamic pos in temp)
-                    {
-                        string name = pos.Name;
-                        int quantity = Convert.ToInt32(pos.Quantity);
-                        Record record = db.Records.Single(o => o.Title == name);
-                        decimal unitPrice = record.Price;
-                        OrderList orderlist = new OrderList { Order = order, Quantity = quantity, UnitPrice = unitPrice, Record = record };
-                        db.OrderLists.Add(orderlist);
-                        db.SaveChanges();
-                    }
 
-                    MailMessage mail = new MailMessage("ideimusic@outlook.com", user.Email, "Encomenda", "A sua encomenda foi registada");
-                    NetworkCredential netCred = new NetworkCredential("ideimusic@outlook.com", "Qwerty123456");
-                    SmtpClient smtpobj = new SmtpClient("smtp-mail.outlook.com", 587);
-                    smtpobj.EnableSsl = true;
-                    smtpobj.Credentials = netCred;
-                    smtpobj.Send(mail);
+                Order order = new Order { OrderDate = System.DateTime.Now };
+                db.Orders.Add(order);
+                db.SaveChanges();
+                dynamic temp = Json.Decode(newOrder);
+                foreach (dynamic pos in temp)
+                {
+                    string name = pos.Name;
+                    int quantity = Convert.ToInt32(pos.Quantity);
+                    Record record;
+                    try
+                    {
+                        record = db.Records.Single(o => o.Title == name);
+                    }
+                    catch
+                    {
+                        return "Record not found!";
+                    }
+                    decimal unitPrice = record.Price;
+                    OrderList orderlist = new OrderList { Order = order, Quantity = quantity, UnitPrice = unitPrice, Record = record };
+                    db.OrderLists.Add(orderlist);
+                    db.SaveChanges();
                 }
+
+                MailMessage mail = new MailMessage("ideimusic@outlook.com", user.Email, "Encomenda", "A sua encomenda foi registada");
+                NetworkCredential netCred = new NetworkCredential("ideimusic@outlook.com", "Qwerty123456");
+                SmtpClient smtpobj = new SmtpClient("smtp-mail.outlook.com", 587);
+                smtpobj.EnableSsl = true;
+                smtpobj.Credentials = netCred;
+                smtpobj.Send(mail);
+
             }
+            return "Invalid parameters!";
         }
 
-        public void newSale(string newSale, string APIKey)
+        public string newSale(string newSale, string APIKey)
         {
-            
+
             if (newSale != null && APIKey != null)
             {
                 ApplicationUser user;
@@ -113,18 +122,25 @@ namespace idei
                 }
                 catch
                 {
-                    return;
+                    return "User not found!";
                 }
                 dynamic temp = Json.Decode(newSale);
                 foreach (dynamic pos in temp)
                 {
                     string name = pos.Name;
                     int quantity = Convert.ToInt32(pos.Quantity);
-                    Record record = db.Records.Single(o => o.Title == name);
+                    Record record ;
+                    try{
+                       record = db.Records.Single(o => o.Title == name);
+                    }
+                    catch{
+                        return "Record not found!";
+                    }
                     record.ShopSales += quantity;
                     db.SaveChanges();
                 }
             }
+            return ("Invalid parameters!");
         }
 
 

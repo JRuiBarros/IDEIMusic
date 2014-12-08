@@ -18,8 +18,8 @@ namespace idei
         [OperationContract]
         string SendAPIKey(string email);
         [OperationContract]
-        void newOrder(string newOrder, string APIKey);
+        string newOrder(string newOrder, string APIKey);
         [OperationContract]
-        void newSale(string newSale, string APIKey);
+        string newSale(string newSale, string APIKey);
     }
 }
