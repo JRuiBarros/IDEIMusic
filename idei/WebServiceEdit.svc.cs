@@ -36,10 +36,7 @@ namespace idei
                 {
                     return "User not found";
                 }
-                if (user != null)
-                {
-                    return user.Id;
-                }
+                return (String) user.Id;
             }
             return "Null Email!";
         }
@@ -129,11 +126,13 @@ namespace idei
                 {
                     string name = pos.Name;
                     int quantity = Convert.ToInt32(pos.Quantity);
-                    Record record ;
-                    try{
-                       record = db.Records.Single(o => o.Title == name);
+                    Record record;
+                    try
+                    {
+                        record = db.Records.Single(o => o.Title == name);
                     }
-                    catch{
+                    catch
+                    {
                         return "Record not found!";
                     }
                     record.ShopSales += quantity;
