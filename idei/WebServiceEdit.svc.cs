@@ -27,6 +27,7 @@ namespace idei
         {
             if (email != null)
             {
+                //string mail = Json.Decode(email);
                 ApplicationUser user = null;
                 try
                 {
@@ -36,7 +37,8 @@ namespace idei
                 {
                     return "User not found";
                 }
-                return (String) user.Id;
+                return Json.Encode(user.Id);
+                
             }
             return "Null Email!";
         }
@@ -73,7 +75,7 @@ namespace idei
                     return "User not found!";
                 }
 
-                Order order = new Order { OrderDate = System.DateTime.Now };
+                Order order = new Order {User = user, OrderDate = System.DateTime.Now };
                 db.Orders.Add(order);
                 db.SaveChanges();
                 dynamic temp = Json.Decode(newOrder);
@@ -103,14 +105,15 @@ namespace idei
                 smtpobj.Credentials = netCred;
                 smtpobj.Send(mail);
 
+                return "Completed";
             }
             return "Invalid parameters!";
         }
 
-        public string newSale(string newSale, string APIKey)
+        public string newSale(string newSale,string APIKey)
         {
 
-            if (newSale != null && APIKey != null)
+            if (APIKey != null && newSale!= null)
             {
                 ApplicationUser user;
                 try
@@ -121,11 +124,18 @@ namespace idei
                 {
                     return "User not found!";
                 }
+
+               // return (newSale+" "+APIKey);
+               
                 dynamic temp = Json.Decode(newSale);
-                foreach (dynamic pos in temp)
+                //return ("HUE");
+                //return (temp);
+
+                foreach (dynamic sale in temp)
                 {
-                    string name = pos.Name;
-                    int quantity = Convert.ToInt32(pos.Quantity);
+                    string name = sale.Name;
+                  
+                    int quantity = Convert.ToInt32(sale.Quantity);
                     Record record;
                     try
                     {
@@ -138,6 +148,7 @@ namespace idei
                     record.ShopSales += quantity;
                     db.SaveChanges();
                 }
+                return "Completed";
             }
             return ("Invalid parameters!");
         }
