@@ -2,20 +2,15 @@ namespace idei.Migrations
 {
     using idei.Models;
     using IdentitySample.Models;
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.Data.Entity.Validation;
     using System.Linq;
-    using System.Web;
-    using System.Security.Claims;
-    using Microsoft.AspNet.Identity;
-    using Microsoft.AspNet.Identity.EntityFramework;
-    using Microsoft.AspNet.Identity.Owin;
-    using Microsoft.Owin;
-    using Microsoft.Owin.Security;
-    using System.Threading.Tasks;
-
+    using System.Text;
 
     internal sealed class Configuration : DbMigrationsConfiguration<IdentitySample.Models.ApplicationDbContext>
     {
@@ -38,8 +33,10 @@ namespace idei.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-            var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            var roleManager = new ApplicationRoleManager(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+            // var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            //var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
             const string name = "admin@example.com";
             const string password = "Admin@123456";
             const string roleName = "Admin";
@@ -287,17 +284,19 @@ namespace idei.Migrations
             records.ForEach(r => db.Records.Add(r));
             db.SaveChanges();
 
+            var userid = user.Id;
+            var managerid = managerUser.Id;
 
             //var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var orders = new List<Order>{ 
                              
                 new Order{ 
-                    User = userManager.FindByEmail( "admin@example.com" ), OrderDate = new DateTime(2014,12,24)/*,Total=150*/},
+                    UserId = userid, OrderDate = new DateTime(2014,12,24)/*,Total=150*/},
                     new Order{ 
-                    User = userManager.FindByEmail( "manager@example.com" ), OrderDate = new DateTime(2014,12,25),/*Total=50*/}
+                    UserId = managerid, OrderDate = new DateTime(2014,12,25),/*Total=50*/}
             };
             orders.ForEach(o => db.Orders.Add(o));
-            db.SaveChanges();
+            SaveChanges(db);
 
 
             var orderLists = new List<OrderList>{
@@ -310,6 +309,42 @@ namespace idei.Migrations
             Record test = db.Records.Single(o => o.Title == "Balls to the Wall");
             test.ShopSales += 1;
             db.SaveChanges();
+
+        }
+
+
+        /// <summary>
+        /// Wrapper for SaveChanges adding the Validation Messages to the generated exception
+        /// </summary>
+        /// <param name="context">The context.</param>
+        private void SaveChanges(DbContext context)
+        {
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                foreach (var failure in ex.EntityValidationErrors)
+                {
+                    sb.AppendFormat("{0} failed validation\n", failure.Entry.Entity.GetType());
+                    foreach (var error in failure.ValidationErrors)
+                    {
+                        sb.AppendFormat("- {0} : {1}", error.PropertyName, error.ErrorMessage);
+                        sb.AppendLine();
+                    }
+                }
+
+                throw new DbEntityValidationException(
+                    "Entity Validation Failed - errors follow:\n" +
+                    sb.ToString(), ex
+                ); // Add the original exception as the innerException
+            }
         }
     }
 }
+
+
+
