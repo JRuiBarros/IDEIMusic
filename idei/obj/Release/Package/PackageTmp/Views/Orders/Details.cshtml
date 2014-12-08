@@ -1,0 +1,100 @@
+﻿@model idei.Models.Order
+
+@{
+    ViewBag.Title = "Details";
+}
+<script src="/Scripts/jquery-2.1.1.min.js"
+        type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        // Document.ready -> link up remove event handler
+        $(".RemoveLink").click(function () {
+            // Get the id from the link
+            var orderListToDelete = $(this).attr("data-id");
+            if (orderListToDelete != '') {
+                // Perform the ajax post
+                $.post("/Orders/RemoveFromOrder", { orderListId: orderListToDelete },
+                    function (data) {
+                        // Successful requests get here
+                        // Update the page elements
+                        //if (data.ItemCount == 0) {
+                        $('#row-' + orderListToDelete).fadeOut('slow');
+                        //} else {
+                        //    $('#item-count-' + data.DeleteId).text(data.ItemCount);
+                        //}
+                        //$('#cart-total').text(data.CartTotal);
+                        //$('#update-message').text(data.Message);
+                        //$('#cart-status').text('Cart (' + data.CartCount + ')');
+                    });
+            }
+        });
+    });
+</script>
+<h2>Details</h2>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+        @*<dt>
+                @Html.DisplayNameFor(model => model.Total)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Total)
+            </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderLists)
+        </dt>
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>Record</th>
+                    <th>Quantity</th>
+                    <th>UnitPrice</th>
+                    <th></th>
+                </tr>
+
+                @foreach (var xpto in Model.OrderLists)
+                {
+                    <tr id="row-@xpto.OrderListId">
+                        <td>
+                            @Html.DisplayFor(modelItem => xpto.Record.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => xpto.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => xpto.UnitPrice)
+                        </td>
+                        <td>
+                            <a href="#" class="RemoveLink"
+                               data-id="@xpto.OrderListId">
+                                Remove
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.OrderId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

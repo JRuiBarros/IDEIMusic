@@ -108,3 +108,5 @@ C:\Users\Barros\Documents\ideimusic\idei\bin\System.Web.WebPages.Razor.xml
 C:\Users\Barros\Documents\ideimusic\idei\obj\Debug\idei.dll
 C:\Users\Barros\Documents\ideimusic\idei\obj\Debug\idei.pdb
 C:\Users\Barros\Documents\ideimusic\idei\obj\Debug\idei.csprojResolveAssemblyReference.cache
+C:\Users\Barros\Documents\ideimusic\idei\obj\Debug\idei.Migrations.Init.resources
+C:\Users\Barros\Documents\ideimusic\idei\obj\Debug\idei.csproj.GenerateResource.Cache

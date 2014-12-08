@@ -178,6 +178,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="WebServiceEdit.svc" />
+    <None Include="Properties\PublishProfiles\HUe.pubxml" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -303,6 +304,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="IWebServiceEdit.cs" />
+    <Compile Include="Migrations\201412081320349_Init.cs" />
+    <Compile Include="Migrations\201412081320349_Init.Designer.cs">
+      <DependentUpon>201412081320349_Init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\Format.cs" />
@@ -318,6 +324,11 @@
     <Compile Include="WebServiceEdit.svc.cs">
       <DependentUpon>WebServiceEdit.svc</DependentUpon>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201412081320349_Init.resx">
+      <DependentUpon>201412081320349_Init.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

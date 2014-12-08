@@ -1,145 +1,43 @@
-ï»¿using System.Linq;
-using System.Security.Claims;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
-using Microsoft.Owin.Security;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Threading.Tasks;
-using System.Web;
-using idei.Models;
-
-namespace IdentitySample.Models
+namespace idei.Migrations
 {
-    // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
+    using idei.Models;
+    using IdentitySample.Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
+    using System.Linq;
+    using System.Web;
+    using System.Security.Claims;
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
+    using Microsoft.AspNet.Identity.Owin;
+    using Microsoft.Owin;
+    using Microsoft.Owin.Security;
+    using System.Threading.Tasks;
 
-    public class ApplicationUserManager : UserManager<ApplicationUser>
+
+    internal sealed class Configuration : DbMigrationsConfiguration<IdentitySample.Models.ApplicationDbContext>
     {
-        public ApplicationUserManager(IUserStore<ApplicationUser> store)
-            : base(store)
+        public Configuration()
         {
+            AutomaticMigrationsEnabled = true;
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options,
-            IOwinContext context)
+        protected override void Seed(IdentitySample.Models.ApplicationDbContext db)
         {
-            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
-            // Configure validation logic for usernames
-            manager.UserValidator = new UserValidator<ApplicationUser>(manager)
-            {
-                AllowOnlyAlphanumericUserNames = false,
-                RequireUniqueEmail = true
-            };
-            // Configure validation logic for passwords
-            manager.PasswordValidator = new PasswordValidator
-            {
-                RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true,
-            };
-            // Configure user lockout defaults
-            manager.UserLockoutEnabledByDefault = true;
-            manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
-            manager.MaxFailedAccessAttemptsBeforeLockout = 5;
-            // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
-            // You can write your own provider and plug in here.
-            manager.RegisterTwoFactorProvider("PhoneCode", new PhoneNumberTokenProvider<ApplicationUser>
-            {
-                MessageFormat = "Your security code is: {0}"
-            });
-            manager.RegisterTwoFactorProvider("EmailCode", new EmailTokenProvider<ApplicationUser>
-            {
-                Subject = "SecurityCode",
-                BodyFormat = "Your security code is {0}"
-            });
-            manager.EmailService = new EmailService();
-            manager.SmsService = new SmsService();
-            var dataProtectionProvider = options.DataProtectionProvider;
-            if (dataProtectionProvider != null)
-            {
-                manager.UserTokenProvider =
-                    new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
-            }
-            return manager;
-        }
-    }
+            //  This method will be called after migrating to the latest version.
 
-    // Configure the RoleManager used in the application. RoleManager is defined in the ASP.NET Identity core assembly
-    public class ApplicationRoleManager : RoleManager<IdentityRole>
-    {
-        public ApplicationRoleManager(IRoleStore<IdentityRole,string> roleStore)
-            : base(roleStore)
-        {
-        }
-
-        public static ApplicationRoleManager Create(IdentityFactoryOptions<ApplicationRoleManager> options, IOwinContext context)
-        {
-            return new ApplicationRoleManager(new RoleStore<IdentityRole>(context.Get<ApplicationDbContext>()));
-        }
-    }
-
-    public class EmailService : IIdentityMessageService
-    {
-        public Task SendAsync(IdentityMessage message)
-        {
-            // Plug in your email service here to send an email.
-            var credentialUserName = "ideimusic@outlook.com";
-            var sentFrom = "ideimusic@outlook.com";
-            var pwd = "Qwerty123456";
-
-            // Configure the client:
-            System.Net.Mail.SmtpClient client =
-                new System.Net.Mail.SmtpClient("smtp-mail.outlook.com");
-
-            client.Port = 587;
-            client.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-
-            // Create the credentials:
-            System.Net.NetworkCredential credentials =
-                new System.Net.NetworkCredential(credentialUserName, pwd);
-
-            client.EnableSsl = true;
-            client.Credentials = credentials;
-
-            // Create the message:
-            var mail =
-                new System.Net.Mail.MailMessage(sentFrom, message.Destination);
-
-            mail.Subject = message.Subject;
-            mail.Body = message.Body;
-
-            // Send:
-            return client.SendMailAsync(mail);
-        }
-    }
-
-    public class SmsService : IIdentityMessageService
-    {
-        public Task SendAsync(IdentityMessage message)
-        {
-            // Plug in your sms service here to send a text message.
-            return Task.FromResult(0);
-        }
-    }
-
-    // This is useful if you do not want to tear down the database each time you run the application.
-    // public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
-    // This example shows you how to create a new database if the Model changes
-    public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext> 
-    {
-        protected override void Seed(ApplicationDbContext context) {
-            InitializeIdentityForEF(context);
-            base.Seed(context);
-        }
-
-        //Create User=Admin@Admin.com with password=Admin@123456 in the Admin role        
-        public static void InitializeIdentityForEF(ApplicationDbContext db) {
+            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
+            //  to avoid creating duplicate seed data. E.g.
+            //
+            //    context.People.AddOrUpdate(
+            //      p => p.FullName,
+            //      new Person { FullName = "Andrew Peters" },
+            //      new Person { FullName = "Brice Lambson" },
+            //      new Person { FullName = "Rowan Miller" }
+            //    );
+            //
             var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
             const string name = "admin@example.com";
@@ -152,7 +50,8 @@ namespace IdentitySample.Models
 
             //Create Role Admin if it does not exist
             var role = roleManager.FindByName(roleName);
-            if (role == null) {
+            if (role == null)
+            {
                 role = new IdentityRole(roleName);
                 var roleresult = roleManager.Create(role);
             }
@@ -165,7 +64,8 @@ namespace IdentitySample.Models
             }
 
             var user = userManager.FindByName(name);
-            if (user == null) {
+            if (user == null)
+            {
                 user = new ApplicationUser { UserName = name, Email = name, EmailConfirmed = true };
                 var result = userManager.Create(user, password);
                 result = userManager.SetLockoutEnabled(user.Id, false);
@@ -184,10 +84,11 @@ namespace IdentitySample.Models
 
             // Add user admin to Role Admin if not already added
             var rolesForUser = userManager.GetRoles(user.Id);
-            if (!rolesForUser.Contains(role.Name)) {
+            if (!rolesForUser.Contains(role.Name))
+            {
                 var result = userManager.AddToRole(user.Id, role.Name);
             }
-         
+
             var rolesForManagerUser = userManager.GetRoles(managerUser.Id);
             if (!rolesForManagerUser.Contains(managerRole.Name))
             {
@@ -232,7 +133,7 @@ namespace IdentitySample.Models
                 new Artist { Name = "Alice In Chains" },
                 new Artist { Name = "Amy Winehouse" },
                 new Artist { Name = "Anita Ward" },
-                new Artist { Name = "AntÃ´nio Carlos Jobim" },
+                new Artist { Name = "Antônio Carlos Jobim" },
                 new Artist { Name = "Apocalyptica" },
                 new Artist { Name = "Audioslave" },
                 new Artist { Name = "Barry Wordsworth & BBC Concert Orchestra" },
@@ -248,16 +149,16 @@ namespace IdentitySample.Models
                 new Artist { Name = "Caetano Veloso" },
                 new Artist { Name = "Cake" },
                 new Artist { Name = "Calexico" },
-                new Artist { Name = "CÃ¡ssia Eller" },
+                new Artist { Name = "Cássia Eller" },
                 new Artist { Name = "Chic" },
                 new Artist { Name = "Chicago Symphony Orchestra & Fritz Reiner" },
                 new Artist { Name = "Chico Buarque" },
-                new Artist { Name = "Chico Science & NaÃ§Ã£o Zumbi" },
+                new Artist { Name = "Chico Science & Nação Zumbi" },
                 new Artist { Name = "Choir Of Westminster Abbey & Simon Preston" },
                 new Artist { Name = "Chris Cornell" },
                 new Artist { Name = "Christopher O'Riley" },
                 new Artist { Name = "Cidade Negra" },
-                new Artist { Name = "ClÃ¡udio Zoli" },
+                new Artist { Name = "Cláudio Zoli" },
                 new Artist { Name = "Creedence Clearwater Revival" },
                 new Artist { Name = "David Coverdale" },
                 new Artist { Name = "Deep Purple" },
@@ -281,7 +182,7 @@ namespace IdentitySample.Models
                 new Artist { Name = "Gilberto Gil" },
                 new Artist { Name = "Godsmack" },
                 new Artist { Name = "Gonzaguinha" },
-                new Artist { Name = "GÃ¶teborgs Symfoniker & Neeme JÃ¤rvi" },
+                new Artist { Name = "Göteborgs Symfoniker & Neeme Järvi" },
                 new Artist { Name = "Guns N' Roses" },
                 new Artist { Name = "Gustav Mahler" },
                 new Artist { Name = "Incognito" },
@@ -294,10 +195,10 @@ namespace IdentitySample.Models
                 new Artist { Name = "Jota Quest" },
                 new Artist { Name = "Judas Priest" },
                 new Artist { Name = "Julian Bream" },
-                new Artist { Name = "Kent Nagano and Orchestre de l'OpÃ©ra de Lyon" },
+                new Artist { Name = "Kent Nagano and Orchestre de l'Opéra de Lyon" },
                 new Artist { Name = "Kiss" },
                 new Artist { Name = "Led Zeppelin" },
-                new Artist { Name = "LegiÃ£o Urbana" },
+                new Artist { Name = "Legião Urbana" },
                 new Artist { Name = "Lenny Kravitz" },
                 new Artist { Name = "Les Arts Florissants & William Christie" },
                 new Artist { Name = "London Symphony Orchestra & Sir Charles Mackerras" },
@@ -314,12 +215,12 @@ namespace IdentitySample.Models
                 new Artist { Name = "Michael Tilson Thomas & San Francisco Symphony" },
                 new Artist { Name = "Miles Davis" },
                 new Artist { Name = "Milton Nascimento" },
-                new Artist { Name = "MÃ¶tley CrÃ¼e" },
-                new Artist { Name = "MotÃ¶rhead" },
+                new Artist { Name = "Mötley Crüe" },
+                new Artist { Name = "Motörhead" },
                 new Artist { Name = "Nash Ensemble" },
                 new Artist { Name = "Nicolaus Esterhazy Sinfonia" },
                 new Artist { Name = "Nirvana" },
-                new Artist { Name = "O TerÃ§o" },
+                new Artist { Name = "O Terço" },
                 new Artist { Name = "Olodum" },
                 new Artist { Name = "Orchestra of The Age of Enlightenment" },
                 new Artist { Name = "Os Paralamas Do Sucesso" },
@@ -364,7 +265,7 @@ namespace IdentitySample.Models
                 new Artist { Name = "Van Halen" },
                 new Artist { Name = "Various Artists" },
                 new Artist { Name = "Velvet Revolver" },
-                new Artist { Name = "VinÃ­cius De Moraes" },
+                new Artist { Name = "Vinícius De Moraes" },
                 new Artist { Name = "Wilhelm Kempff" },
                 new Artist { Name = "Yehudi Menuhin" },
                 new Artist { Name = "Yo-Yo Ma" },
@@ -386,7 +287,7 @@ namespace IdentitySample.Models
             records.ForEach(r => db.Records.Add(r));
             db.SaveChanges();
 
-         
+
             //var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var orders = new List<Order>{ 
                              
@@ -409,24 +310,6 @@ namespace IdentitySample.Models
             Record test = db.Records.Single(o => o.Title == "Balls to the Wall");
             test.ShopSales += 1;
             db.SaveChanges();
-        }
-    }
-       
-    
-
-    public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
-    {
-        public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager) : 
-            base(userManager, authenticationManager) { }
-
-        public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
-        {
-            return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
-        }
-
-        public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
-        {
-            return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
         }
     }
 }
