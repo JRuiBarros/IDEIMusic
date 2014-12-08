@@ -16,6 +16,8 @@ namespace idei
         [OperationContract]
         string GetAllRecords(string APIKey);
         [OperationContract]
+        string SendAPIKey(string email);
+        [OperationContract]
         void newOrder(string newOrder, string APIKey);
         [OperationContract]
         void newSale(string newSale, string APIKey);

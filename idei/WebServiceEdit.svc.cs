@@ -27,7 +27,15 @@ namespace idei
         {
             if (email != null)
             {
-                var user = db.Users.Single(u => u.Email == email);
+                ApplicationUser user = null;
+                try
+                {
+                    user = db.Users.Single(u => u.Email == email);
+                }
+                catch
+                {
+                    return "User not found";
+                }
                 if (user != null)
                 {
                     return user.Id;
@@ -38,7 +46,16 @@ namespace idei
 
         public string GetAllRecords(string APIKey)
         {
-            if (db.Users.Single(u => u.Id == APIKey) != null)
+            ApplicationUser user = null;
+            try
+            {
+                user = db.Users.Single(u => u.Id == APIKey);
+            }
+            catch
+            {
+                return "User not found";
+            }
+            if (user != null)
                 return Json.Encode(db.Records);
             else
                 return "User not found!";
@@ -48,7 +65,15 @@ namespace idei
         {
             if (newOrder != null && APIKey != null)
             {
-                var user = db.Users.Single(u => u.Id == APIKey);
+                ApplicationUser user;
+                try
+                {
+                   user = db.Users.Single(u => u.Id == APIKey);
+                }
+                catch
+                {
+                    return;
+                }
                 if (user != null)
                 {
                     Order order = new Order { OrderDate = System.DateTime.Now };
@@ -76,11 +101,20 @@ namespace idei
             }
         }
 
-        public void newSale(string newSale,string APIKey)
+        public void newSale(string newSale, string APIKey)
         {
-
-            if (newSale != null && db.Users.Single(u => u.Id == APIKey) != null)
+            
+            if (newSale != null && APIKey != null)
             {
+                ApplicationUser user;
+                try
+                {
+                    user = db.Users.Single(u => u.Id == APIKey);
+                }
+                catch
+                {
+                    return;
+                }
                 dynamic temp = Json.Decode(newSale);
                 foreach (dynamic pos in temp)
                 {
